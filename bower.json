@@ -1,0 +1,24 @@
+{
+  "name": "thin-trap",
+  "version": "0.0.1",
+  "description": "Thin ES6 Proxy Wrapper for Better Transparency",
+  "main": "trap.js",
+  "authors": [
+    "Tetsuya Mori <t2y3141592@gmail.com>"
+  ],
+  "license": "BSD-2-Clause",
+  "keywords": [
+    "proxy",
+    "ES6",
+    "ES2015",
+    "trap"
+  ],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "devDependencies": {
+  }
+}
