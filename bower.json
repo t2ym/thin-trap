@@ -1,6 +1,6 @@
 {
   "name": "thin-trap",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Thin ES6 Proxy Wrapper for Better Transparency",
   "main": "trap.js",
   "authors": [
