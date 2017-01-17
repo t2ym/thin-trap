@@ -2,10 +2,29 @@
 @license https://github.com/t2ym/scenarist/blob/master/LICENSE.md
 Copyright (c) 2017, Tetsuya Mori <t2y3141592@gmail.com>. All rights reserved.
 */
+const proxyToTarget = new WeakMap();
+const targetToProxy = new WeakMap();
+function register(target, proxyGenerator) {
+  let proxy = targetToProxy.get(target);
+  if (!proxy) {
+    let tmpTarget = proxyToTarget.get(target);
+    if (tmpTarget) {
+      proxy = target;
+      target = tmpTarget;
+    }
+    if (!proxy) {
+      proxy = proxyGenerator();
+      proxyToTarget.set(proxy, target);
+      targetToProxy.set(target, proxy);
+    }
+  }
+  return proxy;
+}
+
 function trap(target, forwarder, thisArg, proxyForThis) {
   let outerProxy;
   forwarder = forwarder || trap.defaultForwarder;
-  return outerProxy = new Proxy(target, new Proxy({}, {
+  return register(target, () => outerProxy = new Proxy(target, new Proxy({}, {
     get(innerTarget, trapName, receiver) {
       return function (...args) {
         let value;
@@ -47,8 +66,11 @@ function trap(target, forwarder, thisArg, proxyForThis) {
         return value;
       }
     }
-  }));
+  })));
 }
+
+trap.targetToProxy = targetToProxy;
+trap.proxyToTarget = proxyToTarget;
 
 trap.defaultForwarder = function(trapName, args, target, outerProxy, thisArg, proxyForThis) {
   return Reflect[trapName](...args);
